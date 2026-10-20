@@ -7,11 +7,11 @@ int potentiometerPin = 3;
 int displayPins[8] = {4, 5, 6, 7, 8, 9, 10, 11};
 int potentiometerRead;
 
-void makemoney(){
+/*void makemoney(){
     if (buttonPin >= 0){
         digitalWrit
     }
-}
+}*/
 
 void setup(){
     pinMode(buttonPin, INPUT_PULLDOWN);
@@ -25,7 +25,11 @@ void setup(){
 
 void loop(){
     potentiometerRead = analogRead(potentiometerPin);
-    
-    if ()
+    potentiometerRead > 0
+    if (potentiometerRead >= 0 && <= 511){
+        digitalWrite(displayPins[0], HIGH));
+    } else{
+        digitalWrite(displayPins[1], LOW));
+    }
 
 }
