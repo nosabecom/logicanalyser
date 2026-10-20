@@ -1,18 +1,31 @@
 #include <Arduino.h>
 
-int a = 14;
-int b = 32;  
+// replace all numbers with real pins
+int ledPin = 1;
+int buttonPin = 2;
+int potentiometerPin = 3;
+int displayPins[8] = {4, 5, 6, 7, 8, 9, 10, 11};
+int potentiometerRead;
+
+void makemoney(){
+    if (buttonPin >= 0){
+        digitalWrit
+    }
+}
 
 void setup(){
-    pinMode(a, INPUT_PULLDOWN);
-    pinMode(b, OUTPUT);
+    pinMode(buttonPin, INPUT_PULLDOWN);
+    pinMode(potentiometerPin, OUTPUT)
+    pinMode(ledPin, OUTPUT);
+    for (i = 0, i < 8; i++) {
+        pinMode(displayPins[i], OUTPUT)
+    }
+
 }
 
 void loop(){
-    int s = digitalRead](a);
-    if (s == 1){
-        digitalWrite(b, HIGH);
-    } else if (s == 0) {
-        digitalWrite(b, LOW);
-    } 
+    potentiometerRead = analogRead(potentiometerPin);
+    
+    if ()
+
 }
