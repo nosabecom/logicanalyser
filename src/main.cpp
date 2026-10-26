@@ -65,13 +65,18 @@ void loop(){
 
     if (previousButtonState == currentButtonState){
         realButtonState = 0;
-    } else{
+    } else if (previousButtonState == 0 && currentButtonState == 1){
         realButtonState = 1;
-    }
+        timesButtonPressed++;
+    } else {
+        realButtonState = 1;
+    } 
 
-    if (realButtonState == 0){
+    timesButtonPressed = timesButtonPressed % 2;
+
+    if (timesButtonPressed == 0){
         forward();
-    } else if (realButtonState == 1){
+    } else if (timesButtonPressed == 1){
         backward();
     }
     
