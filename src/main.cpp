@@ -7,22 +7,23 @@ int potentiometerPin = 3;
 int displayPins[8] = {4, 5, 6, 7, 8, 9, 10, 11};
 
 // Variables
-int potentiometerRead;
-int timesButtonPressed;
-int currentbuttonState;
-int previousButtonState;
-
+int potentiometerRead = 0;
+int timesButtonPressed = 0;
+int buttonState = 0;
+int currentButtonState = 0;
+int previousButtonState = 0;
+int realButtonState = 0;
 void setup(){
     pinMode(buttonPin, INPUT_PULLDOWN);
     pinMode(potentiometerPin, INPUT);
     pinMode(ledPin, OUTPUT);
-    for (int i = 0, i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         pinMode(displayPins[i], OUTPUT);
     }
 }
 
 void forward(){
-    digitalWrite(ledPin, LOW)
+    digitalWrite(ledPin, LOW);
     potentiometerRead = analogRead(potentiometerPin);
     potentiometerRead = map(potentiometerRead, 0, 4095, 0, 7);
     
@@ -36,7 +37,7 @@ void forward(){
 }
 
 void backward(){
-    digitalWrite(ledPin, HIGH)
+    digitalWrite(ledPin, HIGH);
     potentiometerRead = analogRead(potentiometerPin);
     potentiometerRead = map(potentiometerRead, 0, 4095, 7, 0);
 
@@ -50,19 +51,27 @@ void backward(){
 }
 
 
-void loop(){
 
-    buttonState == digitalRead(buttonPin);    
+void loop(){
+    previousButtonState = currentButtonState;
+    
+    buttonState = digitalRead(buttonPin);
 
     if (buttonState == 1){
-        timesButtonPressed++;
+        currentButtonState = 1;       
+    } else {
+        currentButtonState = 0;
     }
 
-    timesButtonPressed = timesButtonPressed % 2
+    if (previousButtonState == currentButtonState){
+        realButtonState = 0;
+    } else{
+        realButtonState = 1;
+    }
 
-    if (timesButtonPressed == 0){
+    if (realButtonState == 0){
         forward();
-    } else if (timesButtonPressed == 1){
+    } else if (realButtonState == 1){
         backward();
     }
     
