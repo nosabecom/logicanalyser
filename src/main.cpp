@@ -13,6 +13,7 @@ int buttonState = 0;
 int currentButtonState = 0;
 int previousButtonState = 0;
 int realButtonState = 0;
+
 void setup(){
     pinMode(buttonPin, INPUT_PULLDOWN);
     pinMode(potentiometerPin, INPUT);
