@@ -2,7 +2,7 @@
 
 // Pins
 int ledPin = 21;
-int buttonPin = 18;
+int buttonPin = 33;
 int potentiometerPin = 34;
 int displayPins[8] = {27, 14, 12, 13, 4, 0, 2, 15};
 
@@ -15,7 +15,7 @@ int previousButtonState = 0;
 int realButtonState = 0;
 
 void setup(){
-    pinMode(buttonPin, INPUT_PULLDOWN);
+    pinMode(buttonPin, INPUT_PULLUP);
     pinMode(potentiometerPin, INPUT);
     pinMode(ledPin, OUTPUT);
     for (int i = 0; i < 8; i++) {
@@ -65,9 +65,9 @@ void loop(){
     }
 
     if (previousButtonState == currentButtonState){
-        realButtonState = 0;
-    } else if (previousButtonState == 0 && currentButtonState == 1){
         realButtonState = 1;
+    } else if (previousButtonState == 1 && currentButtonState == 0){
+        realButtonState = 0;
         timesButtonPressed++;
     } else {
         realButtonState = 1;
