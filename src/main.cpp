@@ -1,10 +1,10 @@
 #include <Arduino.h>
 
 // Pins
-int ledPin = 1;
-int buttonPin = 2;
-int potentiometerPin = 3;
-int displayPins[8] = {4, 5, 6, 7, 8, 9, 10, 11};
+int ledPin = 21;
+int buttonPin = 18;
+int potentiometerPin = 34;
+int displayPins[8] = {27, 14, 12, 13, 4, 0, 2, 15};
 
 // Variables
 int potentiometerRead = 0;
@@ -80,5 +80,4 @@ void loop(){
     } else if (timesButtonPressed == 1){
         backward();
     }
-    
 }
