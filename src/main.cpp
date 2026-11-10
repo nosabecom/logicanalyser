@@ -12,7 +12,7 @@ int current = 0;
 int realTing = 0;
 int secs; 
 unsigned long mills;
-int totalSecs = 3600;
+int totalSecs;
 int mins;
 int hours;
 int totalMins;
@@ -23,17 +23,17 @@ void setup(){
     Serial.begin(115200);
 }
 
-void timed(){
-    //mills = millis();
+void timing(){
+    mills = millis();
 
-    //totalSecs = mills / 1000;
+    totalSecs = mills / 1000;
 
-    /*if (totalSecs > 0 && totalSecs < 60){
+    if (totalSecs > 0 && totalSecs < 60){
         secs = totalSecs;
     } else if (totalSecs > 60 && totalSecs < 3600){
         secs = totalSecs % 60;
         mins = totalSecs / 60;
-    } else */ if (totalSecs > 3600){
+    } else if (totalSecs > 3600){
         secs = totalSecs % 60;
         totalMins = totalSecs / 60;
         mins = totalMins % 60;
@@ -45,12 +45,11 @@ void timed(){
 }
 
 void loop(){
-
-    /*before = current;
+    before = current;
 
     readings = digitalRead(buttonPin);
 
-    timed();
+    timing();
 
     if (readings == 0) {
         current = 1;
@@ -64,14 +63,9 @@ void loop(){
         realTing = 0;
     } else {
         
-    }*/
+    }
    timed();
-   //Serial.printf("Time: %d:%d:%d\n", hours, mins, secs);
-   
-   Serial.printf("Secs: %d Mins: %d Hours: %d\n", secs, mins, hours);
-   //Serial.printf("Secs: %d\n", secs);
-   //Serial.printf("Mills: %ld\n", mills);
-   totalSecs++;
+   Serial.printf("Time: %d:%d:%d\n", hours, mins, secs);
    delay(1000);
 }
 
