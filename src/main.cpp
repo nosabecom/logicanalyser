@@ -9,6 +9,7 @@ int readings;
 int before = 0;
 int current = 0;
 int realTing = 0;
+unsigned long timing = 0;
 
 void setup(){
     pinMode(buttonPin, INPUT_PULLUP);
@@ -21,17 +22,21 @@ void loop(){
 
     readings = digitalRead(buttonPin);
 
+    timing = micros();
+
     if (readings == 0) {
         current = 1;
+        digitalWrite(ledPin, HIGH);
     } else {
         current = 0;
+        digitalWrite(ledPin, LOW);
     }
 
     if (current == before) {
         realTing = 0;
     } else {
-        Serial.printf("diff\n");
+        Serial.printf("Time: %lu\n", timing);
     }
     
-    delay(250);
+    delay(150);
 }
