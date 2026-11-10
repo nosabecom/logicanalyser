@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+
 // Pins
 int buttonPin = 33;
 int ledPin = 21;
@@ -9,7 +10,12 @@ int readings;
 int before = 0;
 int current = 0;
 int realTing = 0;
-unsigned long timing = 0;
+int secs; 
+unsigned long mills;
+int totalSecs = 3600;
+int mins;
+int hours;
+int totalMins;
 
 void setup(){
     pinMode(buttonPin, INPUT_PULLUP);
@@ -17,12 +23,34 @@ void setup(){
     Serial.begin(115200);
 }
 
+void timed(){
+    //mills = millis();
+
+    //totalSecs = mills / 1000;
+
+    /*if (totalSecs > 0 && totalSecs < 60){
+        secs = totalSecs;
+    } else if (totalSecs > 60 && totalSecs < 3600){
+        secs = totalSecs % 60;
+        mins = totalSecs / 60;
+    } else */ if (totalSecs > 3600){
+        secs = totalSecs % 60;
+        totalMins = totalSecs / 60;
+        mins = totalMins % 60;
+        hours = totalSecs / 3600;
+    }
+
+    
+    
+}
+
 void loop(){
-    before = current;
+
+    /*before = current;
 
     readings = digitalRead(buttonPin);
 
-    timing = micros();
+    timed();
 
     if (readings == 0) {
         current = 1;
@@ -35,8 +63,15 @@ void loop(){
     if (current == before) {
         realTing = 0;
     } else {
-        Serial.printf("Time: %lu\n", timing);
-    }
-    
-    delay(150);
+        
+    }*/
+   timed();
+   //Serial.printf("Time: %d:%d:%d\n", hours, mins, secs);
+   
+   Serial.printf("Secs: %d Mins: %d Hours: %d\n", secs, mins, hours);
+   //Serial.printf("Secs: %d\n", secs);
+   //Serial.printf("Mills: %ld\n", mills);
+   totalSecs++;
+   delay(1000);
 }
+
