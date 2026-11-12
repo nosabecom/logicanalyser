@@ -5,9 +5,6 @@ This was built to analyse signal from different channels on my (Future) custom-m
 >[!NOTE]
 >If you want to read my full (ongoing) write up on this project to get more details and pictures, check out [my website](https://nosa.dev).
 
-> [!WARNING]
-> This project is completely hand-written. AI was used in the making of this project as a guide/teacher. If you wanna read my musings on AI teaching check out [my website](https://nosa.dev).
-
 ## Milestones
 
 - [x] Capture a Single Channel (Currently doing)
