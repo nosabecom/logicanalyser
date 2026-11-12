@@ -2,7 +2,7 @@
 
 
 // Pins
-int inputPin = 33;
+int inputPin = 32;
 int outputPin = 14;
 
 // Variables
@@ -19,7 +19,7 @@ int totalMins;
 unsigned long millsInContext;
 unsigned long millsElapsed;
 int timesMillsElapsed;
-int yolo;
+int yolo = 0;
 int yolo2;
 
 
@@ -72,8 +72,6 @@ void capture(){
 
     readings = digitalRead(inputPin);
 
-    timing();
-
     if (readings == 0) {
         current = 1;
     } else {
@@ -83,12 +81,19 @@ void capture(){
     if (current == before) {
         nothing = 0;
     } else {
+        yolo++;
         Serial.printf("%d,%d,%02d:%02d:%02d:%04lu\n", inputPin, readings, hours, mins, secs, millsInContext);
     }
 }
 
 void loop(){
-    makeSig();
-    capture();
+    if (yolo <= 20){
+        timing();
+        makeSig();
+        capture();
+    } else {
+        nothing = 0;
+    }
+    
 }
 
