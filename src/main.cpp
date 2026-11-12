@@ -3,6 +3,7 @@
 
 // Pins
 int inputPin = 33;
+int outputPin = 14;
 
 // Variables
 int readings;
@@ -16,9 +17,15 @@ int mins;
 int hours; 
 int totalMins;
 unsigned long millsInContext;
+unsigned long millsElapsed;
+int timesMillsElapsed;
+int yolo;
+int yolo2;
+
 
 void setup(){
-    pinMode(inputPin, INPUT_PULLUP);
+    pinMode(inputPin, INPUT);
+    pinMode(outputPin, OUTPUT);
     Serial.begin(115200);
 }
 
@@ -27,7 +34,7 @@ void timing(){
 
     if (mills < 1000) {
         millsInContext = mills;
-    } else if (mills >= 1000){
+    } else {
         millsInContext = mills % 1000;
     }
 
@@ -38,19 +45,29 @@ void timing(){
     } else if (totalSecs >= 60 && totalSecs < 3600){
         secs = totalSecs % 60;
         mins = totalSecs / 60;
-    } else if (totalSecs >= 3600){
+    } else {
         secs = totalSecs % 60;
         totalMins = totalSecs / 60;
         mins = totalMins % 60;
         hours = totalSecs / 3600;
     }
-
-
-    
     
 }
 
-void loop(){
+void makeSig(){
+    millsElapsed = mills / 500;
+
+    timesMillsElapsed = millsElapsed % 2;
+
+    if (timesMillsElapsed == 0) {
+        digitalWrite(outputPin, HIGH);
+    } else {
+        digitalWrite(outputPin, LOW);
+    }
+
+}
+
+void capture(){
     before = current;
 
     readings = digitalRead(inputPin);
@@ -68,5 +85,10 @@ void loop(){
     } else {
         Serial.printf("%d,%d,%02d:%02d:%02d:%04lu\n", inputPin, readings, hours, mins, secs, millsInContext);
     }
+}
+
+void loop(){
+    makeSig();
+    capture();
 }
 
