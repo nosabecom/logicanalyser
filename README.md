@@ -2,11 +2,11 @@
 
 This was built to analyse signal from different channels on my (Future) custom-made logic analyser. This will also consist of a companion desktop app to use with the logic analyser. 
 
-> [!AI Disclaimer]
-> This project is completely hand-written. AI was used in the making of this project as a guide/teacher. If you wanna read my musings on AI teaching check out [my website](https://nosa.dev).
-
->[Full Writup]
+>[!NOTE]
 >If you want to read my full (ongoing) write up on this project to get more details and pictures, check out [my website](https://nosa.dev).
+
+> [!WARNING]
+> This project is completely hand-written. AI was used in the making of this project as a guide/teacher. If you wanna read my musings on AI teaching check out [my website](https://nosa.dev).
 
 ## Milestones
 
