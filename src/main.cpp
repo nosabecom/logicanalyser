@@ -1,83 +1,72 @@
 #include <Arduino.h>
 
+
 // Pins
-int ledPin = 21;
-int buttonPin = 33;
-int potentiometerPin = 34;
-int displayPins[8] = {27, 14, 12, 13, 4, 0, 2, 15};
+int inputPin = 33;
 
 // Variables
-int potentiometerRead = 0;
-int timesButtonPressed = 0;
-int buttonState = 0;
-int currentButtonState = 0;
-int previousButtonState = 0;
-int realButtonState = 0;
+int readings;
+int before = 0;
+int current = 0;
+int nothing;
+unsigned long mills; 
+int secs; 
+int totalSecs; 
+int mins; 
+int hours; 
+int totalMins;
+unsigned long millsInContext;
 
 void setup(){
-    pinMode(buttonPin, INPUT_PULLUP);
-    pinMode(potentiometerPin, INPUT);
-    pinMode(ledPin, OUTPUT);
-    for (int i = 0; i < 8; i++) {
-        pinMode(displayPins[i], OUTPUT);
-    }
+    pinMode(inputPin, INPUT_PULLUP);
+    Serial.begin(115200);
 }
 
-void forward(){
-    digitalWrite(ledPin, LOW);
-    potentiometerRead = analogRead(potentiometerPin);
-    potentiometerRead = map(potentiometerRead, 0, 4095, 0, 7);
+void timing(){
+    mills = millis();
+
+    if (mills < 1000) {
+        millsInContext = mills;
+    } else if (mills >= 1000){
+        millsInContext = mills % 1000;
+    }
+
+    totalSecs = mills / 1000;
+
+    if (totalSecs > 0 && totalSecs < 60){
+        secs = totalSecs;
+    } else if (totalSecs >= 60 && totalSecs < 3600){
+        secs = totalSecs % 60;
+        mins = totalSecs / 60;
+    } else if (totalSecs >= 3600){
+        secs = totalSecs % 60;
+        totalMins = totalSecs / 60;
+        mins = totalMins % 60;
+        hours = totalSecs / 3600;
+    }
+
+
     
-    for (int c = 0; c <= 7; c++) {
-        if (potentiometerRead >= c){
-            digitalWrite(displayPins[c], HIGH);
-        } else {
-            digitalWrite(displayPins[c], LOW);
-        }
-    }
+    
 }
-
-void backward(){
-    digitalWrite(ledPin, HIGH);
-    potentiometerRead = analogRead(potentiometerPin);
-    potentiometerRead = map(potentiometerRead, 0, 4095, 7, 0);
-
-    for (int c = 7; c >= 0; c--) {
-        if (potentiometerRead <= c){
-            digitalWrite(displayPins[c], HIGH);
-        } else {
-            digitalWrite(displayPins[c], LOW);
-        }
-    }
-}
-
-
 
 void loop(){
-    previousButtonState = currentButtonState;
-    
-    buttonState = digitalRead(buttonPin);
+    before = current;
 
-    if (buttonState == 1){
-        currentButtonState = 1;       
+    readings = digitalRead(inputPin);
+
+    timing();
+
+    if (readings == 0) {
+        current = 1;
     } else {
-        currentButtonState = 0;
+        current = 0;
     }
 
-    if (previousButtonState == currentButtonState){
-        realButtonState = 1;
-    } else if (previousButtonState == 1 && currentButtonState == 0){
-        realButtonState = 0;
-        timesButtonPressed++;
+    if (current == before) {
+        nothing = 0;
     } else {
-        realButtonState = 1;
-    } 
-
-    timesButtonPressed = timesButtonPressed % 2;
-
-    if (timesButtonPressed == 0){
-        forward();
-    } else if (timesButtonPressed == 1){
-        backward();
+        Serial.printf("%d,%d,%02d:%02d:%02d:%04lu\n", inputPin, readings, hours, mins, secs, millsInContext);
     }
 }
+
