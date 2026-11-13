@@ -103,13 +103,13 @@ void loop(){
     }
 
     if(yolo == 20 && printed == 0){
-        Serial.printf("reading: %d, time(mills): %lu \n", levelItsAt[0], timeHappened[0]);
+        Serial.printf("reading: %d, time(micros): %lu \n", levelItsAt[0], timeHappened[0]);
         for(int c = 1; c < 19; c++) {
-            betweenEvents[c] = timeHappened[c + 1] - timeHappened[c];
-            Serial.printf("reading: %d, time(mills): %lu Time between last event:%lu \n", levelItsAt[c], timeHappened[c], betweenEvents[c]);
+            betweenEvents[c] = timeHappened[c] - timeHappened[c - 1];
+            Serial.printf("reading: %d, time(micros): %lu Time between last event:%lu \n", levelItsAt[c], timeHappened[c], betweenEvents[c]);
         }
         betweenEvents[18] = timeHappened[19] - timeHappened[18];
-        Serial.printf("reading: %d, time(mills): %lu Time between last event:%lu \n", levelItsAt[19], timeHappened[19], betweenEvents[18]);
+        Serial.printf("reading: %d, time(micros): %lu Time between last event:%lu \n", levelItsAt[19], timeHappened[19], betweenEvents[18]);
 
         printed = 1;
     }
