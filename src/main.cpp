@@ -23,6 +23,7 @@ int yolo = 0;
 int yolo2;
 unsigned long timeHappened[20];
 int levelItsAt[20];
+unsigned long betweenEvents[19];
 int printed = 0;
 
 
@@ -100,9 +101,14 @@ void loop(){
     }
 
     if(yolo == 20 && printed == 0){
-        for(int c = 0; c < 20; c++) {
-            Serial.printf("reading: %d, time(mills): %lu\n", levelItsAt[c], timeHappened[c]);
+        Serial.printf("reading: %d, time(mills): %lu \n", levelItsAt[0], timeHappened[0]);
+        for(int c = 1; c < 19; c++) {
+            betweenEvents[c] = timeHappened[c + 1] - timeHappened[c];
+            Serial.printf("reading: %d, time(mills): %lu Time between last event:%lu \n", levelItsAt[c], timeHappened[c], betweenEvents[c]);
         }
+        betweenEvents[18] = timeHappened[19] - timeHappened[18];
+        Serial.printf("reading: %d, time(mills): %lu Time between last event:%lu \n", levelItsAt[19], timeHappened[19], betweenEvents[18]);
+
         printed = 1;
     }
 }
