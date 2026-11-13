@@ -8,8 +8,8 @@ This was built to analyse signal from different channels on my (Future) custom-m
 ## Milestones
 
 - [x] Capture a Single Channel 
-- [X] Compare with known signal (Currently doing)
-- [ ] Store in Memory
+- [x] Compare with known signal 
+- [x] Store in Memory (Currently doing)
 - [ ] Measure Performance of capture
 - [ ] Support more channels
 - [ ] Add capture controls

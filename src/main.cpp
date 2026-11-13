@@ -21,6 +21,9 @@ unsigned long millsElapsed;
 int timesMillsElapsed;
 int yolo = 0;
 int yolo2;
+unsigned long timeHappened[20];
+int levelItsAt[20];
+int printed = 0;
 
 
 void setup(){
@@ -81,19 +84,26 @@ void capture(){
     if (current == before) {
         nothing = 0;
     } else {
+        levelItsAt[yolo] = readings;
+        timeHappened[yolo] = mills;
         yolo++;
-        Serial.printf("%d,%d,%02d:%02d:%02d:%04lu\n", inputPin, readings, hours, mins, secs, millsInContext);
+        //Serial.printf("%d,%d,%02d:%02d:%02d:%04lu\n", inputPin, readings, hours, mins, secs, millsInContext);
     }
 }
 
 void loop(){
-    if (yolo <= 20){
+
+    if (yolo < 20){
         timing();
         makeSig();
         capture();
-    } else {
-        nothing = 0;
     }
-    
+
+    if(yolo == 20 && printed == 0){
+        for(int c = 0; c < 20; c++) {
+            Serial.printf("reading: %d, time(mills): %lu\n", levelItsAt[c], timeHappened[c]);
+        }
+        printed = 1;
+    }
 }
 
