@@ -25,7 +25,7 @@ unsigned long timeHappened[20];
 int levelItsAt[20];
 unsigned long betweenEvents[19];
 int printed = 0;
-
+unsigned long micro;
 
 void setup(){
     pinMode(inputPin, INPUT);
@@ -34,6 +34,8 @@ void setup(){
 }
 
 void timing(){
+    micro = micros();
+
     mills = millis();
 
     if (mills < 1000) {
@@ -86,7 +88,7 @@ void capture(){
         nothing = 0;
     } else {
         levelItsAt[yolo] = readings;
-        timeHappened[yolo] = mills;
+        timeHappened[yolo] = micro;
         yolo++;
         //Serial.printf("%d,%d,%02d:%02d:%02d:%04lu\n", inputPin, readings, hours, mins, secs, millsInContext);
     }
