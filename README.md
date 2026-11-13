@@ -9,8 +9,8 @@ This was built to analyse signal from different channels on my (Future) custom-m
 
 - [x] Capture a Single Channel 
 - [x] Compare with known signal 
-- [x] Store in Memory (Currently doing)
-- [ ] Measure Performance of capture
+- [x] Store in Memory 
+- [x] Measure Performance of capture (Currently doing)
 - [ ] Support more channels
 - [ ] Add capture controls
 - [ ] Desktop App
