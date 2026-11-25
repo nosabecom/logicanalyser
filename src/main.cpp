@@ -28,6 +28,11 @@ unsigned long betweenEvents;
 unsigned long timeHappened[maxEnv];
 int levelItsAt[maxEnv];
 int tarEnv = 20;
+bool thecaptured = false;
+const char* reasonStop = "NONE";
+unsigned long sTime = 0;
+unsigned long timeoutTime = 5000000UL;
+
 
 void setup(){
     pinMode(inputPin, INPUT);
@@ -62,7 +67,7 @@ void timing(){
 }
 
 void makeSig(){
-    microsElapsed = micros() / 500000;
+    microsElapsed = micros() / 500000UL;
 
     timesMicrosElapsed = microsElapsed % 2;
 
@@ -89,6 +94,7 @@ void capture(){
     current = readings;
 
     if (current != before) {
+        thecaptured = true;
         levelItsAt[yolo] = readings;
         timeHappened[yolo] = micros();
         yolo++;
@@ -107,6 +113,8 @@ void printTing(){
         betweenEvents = timeHappened[c] - timeHappened[c - 1];
         Serial.printf("reading: %d, time(micros): %lu Time between last event:%lu \n", levelItsAt[c], timeHappened[c], betweenEvents);
     }
+
+    Serial.printf("Reason for Stop: %s", reasonStop);
 }
 
 void loop(){
@@ -116,9 +124,17 @@ void loop(){
         capture();
     }
 
-    if(yolo == tarEnv && printed == false){
+    if (micros() - sTime >= timeoutTime){
+        reasonStop = "TIMEOUT";
         printTing();
         printed = true;
     }
+
+    if(yolo == tarEnv && printed == false){
+        reasonStop = "FULL";
+        printTing();
+        printed = true;
+    }
+    
 }
 
