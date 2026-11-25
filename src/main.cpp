@@ -94,7 +94,6 @@ void capture(){
     current = readings;
 
     if (current != before) {
-        thecaptured = true;
         levelItsAt[yolo] = readings;
         timeHappened[yolo] = micros();
         yolo++;
@@ -114,11 +113,10 @@ void printTing(){
         Serial.printf("reading: %d, time(micros): %lu Time between last event:%lu \n", levelItsAt[c], timeHappened[c], betweenEvents);
     }
 
-    Serial.printf("Reason for Stop: %s", reasonStop);
+    Serial.printf("Reason for Stop: %s\n", reasonStop);
 }
 
-void loop(){
-
+void isCapturing(){
     if (yolo < tarEnv){
         makeSig();
         capture();
@@ -127,14 +125,21 @@ void loop(){
     if (micros() - sTime >= timeoutTime){
         reasonStop = "TIMEOUT";
         printTing();
-        printed = true;
+        thecaptured = true;
     }
 
-    if(yolo == tarEnv && printed == false){
+    if(yolo >= tarEnv ){
         reasonStop = "FULL";
         printTing();
-        printed = true;
+        thecaptured = true;
     }
     
+}
+
+void loop(){
+    if (thecaptured == false){
+        isCapturing();
+    }
+
 }
 
