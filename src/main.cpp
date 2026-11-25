@@ -19,14 +19,15 @@ unsigned long microsInContext;
 unsigned long microsElapsed;
 int timesMicrosElapsed;
 int yolo = 0;
-int yolo2;
-unsigned long timeHappened[20];
-int levelItsAt[20];
-unsigned long betweenEvents[20];
-int printed = 0;
-unsigned long micro;
+bool printed = false;
 bool initialReadIf = false;
 int initRead;
+unsigned long initTime;
+const int maxEnv = 1024;
+unsigned long betweenEvents;
+unsigned long timeHappened[maxEnv];
+int levelItsAt[maxEnv];
+int tarEnv = 20;
 
 void setup(){
     pinMode(inputPin, INPUT);
@@ -38,13 +39,13 @@ void timing(){
 
     mills = millis();
 
-    if (micro < 1000000) {
-        microsInContext = micro;
+    if (micros() < 1000000) {
+        microsInContext = micros();
     } else {
-        microsInContext = micro % 1000000;
+        microsInContext = micros() % 1000000;
     }
 
-    totalSecs = micro / 1000000;
+    totalSecs = micros() / 1000000;
 
     if (totalSecs > 0 && totalSecs < 60){
         secs = totalSecs;
@@ -61,7 +62,7 @@ void timing(){
 }
 
 void makeSig(){
-    microsElapsed = micro / 500000;
+    microsElapsed = micros() / 500000;
 
     timesMicrosElapsed = microsElapsed % 2;
 
@@ -73,11 +74,12 @@ void makeSig(){
 
 }
 
-void capture()
+void capture(){
     before = current;
     readings = digitalRead(inputPin);
 
     if (initialReadIf == false){
+        initTime = micros();
         initRead = readings;
         before = readings;
         current = readings;
@@ -87,31 +89,36 @@ void capture()
     current = readings;
 
     if (current != before) {
-        micro = micros();
         levelItsAt[yolo] = readings;
-        timeHappened[yolo] = micro;
+        timeHappened[yolo] = micros();
         yolo++;
         //Serial.printf("%d,%d,%02d:%02d:%02d:%04lu\n", inputPin, readings, hours, mins, secs, millsInContext);
     } 
 }
 
+void printTing(){
+    Serial.printf("Initial reading: %d, Initial Time: %lu, Transitions: %d\n", initRead, initTime, yolo);
+    if (yolo > 0){
+        Serial.printf("reading: %d, time(micros): %lu \n", levelItsAt[0], timeHappened[0]);
+    }
+    
+
+    for(int c = 1; c < yolo; c++) {
+        betweenEvents = timeHappened[c] - timeHappened[c - 1];
+        Serial.printf("reading: %d, time(micros): %lu Time between last event:%lu \n", levelItsAt[c], timeHappened[c], betweenEvents);
+    }
+}
+
 void loop(){
 
-    if (yolo < 20){
+    if (yolo < tarEnv){
         makeSig();
         capture();
     }
 
-    if(yolo == 20 && printed == 0){
-        Serial.printf("Initial reading: %d \n", initRead);
-        Serial.printf("reading: %d, time(micros): %lu \n", levelItsAt[0], timeHappened[0]);
-
-        for(int c = 1; c < 20; c++) {
-            betweenEvents[c] = timeHappened[c] - timeHappened[c - 1];
-            Serial.printf("reading: %d, time(micros): %lu Time between last event:%lu \n", levelItsAt[c], timeHappened[c], betweenEvents[c]);
-        }
-
-        printed = 1;
+    if(yolo == tarEnv && printed == false){
+        printTing();
+        printed = true;
     }
 }
 
