@@ -15,9 +15,9 @@ int totalSecs;
 int mins; 
 int hours; 
 int totalMins;
-unsigned long millsInContext;
-unsigned long millsElapsed;
-int timesMillsElapsed;
+unsigned long microsInContext;
+unsigned long microsElapsed;
+int timesMicrosElapsed;
 int yolo = 0;
 int yolo2;
 unsigned long timeHappened[20];
@@ -35,17 +35,16 @@ void setup(){
 }
 
 void timing(){
-    micro = micros();
 
     mills = millis();
 
-    if (mills < 1000) {
-        millsInContext = mills;
+    if (micro < 1000000) {
+        microsInContext = micro;
     } else {
-        millsInContext = mills % 1000;
+        microsInContext = micro % 1000000;
     }
 
-    totalSecs = mills / 1000;
+    totalSecs = micro / 1000000;
 
     if (totalSecs > 0 && totalSecs < 60){
         secs = totalSecs;
@@ -62,11 +61,11 @@ void timing(){
 }
 
 void makeSig(){
-    millsElapsed = mills / 500;
+    microsElapsed = micro / 500000;
 
-    timesMillsElapsed = millsElapsed % 2;
+    timesMicrosElapsed = microsElapsed % 2;
 
-    if (timesMillsElapsed == 0) {
+    if (timesMicrosElapsed == 0) {
         digitalWrite(outputPin, HIGH);
     } else {
         digitalWrite(outputPin, LOW);
@@ -74,7 +73,7 @@ void makeSig(){
 
 }
 
-void capture(){
+void capture()
     before = current;
     readings = digitalRead(inputPin);
 
@@ -85,13 +84,10 @@ void capture(){
         initialReadIf = true;
     }
 
-    if (readings == 1) {
-        current = 1;
-    } else {
-        current = 0;
-    }
+    current = readings;
 
     if (current != before) {
+        micro = micros();
         levelItsAt[yolo] = readings;
         timeHappened[yolo] = micro;
         yolo++;
@@ -103,11 +99,11 @@ void loop(){
 
     if (yolo < 20){
         makeSig();
-        timing();
         capture();
     }
 
     if(yolo == 20 && printed == 0){
+        Serial.printf("Initial reading: %d \n", initRead);
         Serial.printf("reading: %d, time(micros): %lu \n", levelItsAt[0], timeHappened[0]);
 
         for(int c = 1; c < 20; c++) {
