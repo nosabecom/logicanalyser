@@ -7,9 +7,8 @@ int outputPin = 14;
 
 // Variables
 int readings;
-int before = 0;
-int current = 0;
-int nothing;
+int before;
+int current;
 unsigned long mills; 
 int secs; 
 int totalSecs; 
@@ -26,6 +25,8 @@ int levelItsAt[20];
 unsigned long betweenEvents[20];
 int printed = 0;
 unsigned long micro;
+bool initialReadIf = false;
+int initRead;
 
 void setup(){
     pinMode(inputPin, INPUT);
@@ -75,30 +76,34 @@ void makeSig(){
 
 void capture(){
     before = current;
-
     readings = digitalRead(inputPin);
 
-    if (readings == 0) {
+    if (initialReadIf == false){
+        initRead = readings;
+        before = readings;
+        current = readings;
+        initialReadIf = true;
+    }
+
+    if (readings == 1) {
         current = 1;
     } else {
         current = 0;
     }
 
-    if (current == before) {
-        nothing = 0;
-    } else {
+    if (current != before) {
         levelItsAt[yolo] = readings;
         timeHappened[yolo] = micro;
         yolo++;
         //Serial.printf("%d,%d,%02d:%02d:%02d:%04lu\n", inputPin, readings, hours, mins, secs, millsInContext);
-    }
+    } 
 }
 
 void loop(){
 
     if (yolo < 20){
-        timing();
         makeSig();
+        timing();
         capture();
     }
 
